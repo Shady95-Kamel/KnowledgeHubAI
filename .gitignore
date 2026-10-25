@@ -1,0 +1,44 @@
+
+# .NET build output
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/secrets.json
+
+# Certificates and private keys
+*.pfx
+*.p12
+*.key
+*.pem
+
+# Local database and backup files
+*.bak
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# Operating system
+.DS_Store
+Thumbs.db

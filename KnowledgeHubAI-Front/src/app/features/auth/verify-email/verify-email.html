@@ -1,0 +1,59 @@
+
+<div class="verification-page">
+  <section class="verification-card">
+
+    <div
+      class="status-icon"
+      [class.loading]="isLoading"
+      [class.success]="!isLoading && isSuccess"
+      [class.error]="!isLoading && !isSuccess"
+    >
+      @if (isLoading) {
+        <span class="spinner"></span>
+      } @else if (isSuccess) {
+        <span class="check-icon">✓</span>
+      } @else {
+        <span class="error-icon">!</span>
+      }
+    </div>
+
+    <div class="verification-content">
+      @if (isLoading) {
+        <h1>Verifying your email</h1>
+        <p class="description">
+          Please wait while we verify your email address.
+        </p>
+      } @else if (isSuccess) {
+        <h1>Email Verified!</h1>
+        <p class="description">
+          Your email address has been verified successfully.
+          Your account is now active.
+        </p>
+      } @else {
+        <h1>Verification Failed</h1>
+        <p class="description error-text" role="alert">
+          {{ message }}
+        </p>
+      }
+
+      @if (!isLoading && isSuccess) {
+        <a routerLink="/login" class="primary-button">
+          Continue to Login
+          <span>→</span>
+        </a>
+      }
+
+      @if (!isLoading && !isSuccess) {
+        <a routerLink="/register" class="secondary-button">
+          Back to Register
+        </a>
+      }
+    </div>
+
+    <div class="verification-footer">
+      <span class="footer-dot"></span>
+      KnowledgeHubAI
+    </div>
+
+  </section>
+</div>

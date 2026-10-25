@@ -1,0 +1,161 @@
+<div class="auth-page">
+  <section class="auth-card">
+    <div class="brand">
+      <div class="brand-icon">K</div>
+      <span>KnowledgeHub<span class="brand-highlight">AI</span></span>
+    </div>
+
+    <div class="auth-heading">
+      <h1>Create your account</h1>
+      <p>Join KnowledgeHubAI and start exploring your documents with AI.</p>
+    </div>
+
+    <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="name-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>First name</mat-label>
+          <input matInput placeholder="Enter first name" formControlName="firstName" />
+          @if (
+          registerForm.controls['firstName'].touched &&
+          registerForm.controls['firstName'].hasError('required')
+          ) {
+          <mat-error>First name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last name</mat-label>
+          <input matInput placeholder="Enter last name" formControlName="lastName" />
+          @if (
+          registerForm.controls['lastName'].touched &&
+          registerForm.controls['lastName'].hasError('required')
+          ) {
+          <mat-error>Last name is required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email address</mat-label>
+
+        <input matInput type="email" placeholder="you@example.com" formControlName="email" />
+
+        <mat-icon matPrefix>mail</mat-icon>
+
+        @if (
+        registerForm.controls['email'].touched &&
+        registerForm.controls['email'].hasError('required')
+        ) {
+        <mat-error>Email is required.</mat-error>
+        }
+
+        @if (
+        registerForm.controls['email'].touched &&
+        registerForm.controls['email'].hasError('email')
+        ) {
+        <mat-error>Please enter a valid email address.</mat-error>
+        }
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+
+        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
+          autocomplete="new-password" />
+
+        <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+          <mat-icon>
+            {{ showPassword ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        @if (registerForm.get('password')?.hasError('required')
+        && registerForm.get('password')?.touched) {
+        <mat-error>Password is required.</mat-error>
+        }
+
+        @if (registerForm.get('password')?.hasError('minlength')
+        && registerForm.get('password')?.touched) {
+        <mat-error>Password must be at least 8 characters.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm Password</mat-label>
+
+        <input matInput [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+          [errorStateMatcher]="confirmPasswordMatcher" autocomplete="new-password" />
+
+        <button mat-icon-button matSuffix type="button" (click)="showConfirmPassword = !showConfirmPassword"
+          [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'">
+          <mat-icon>
+            {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        @if (registerForm.get('confirmPassword')?.hasError('required')
+        && registerForm.get('confirmPassword')?.touched) {
+        <mat-error>Confirm password is required.</mat-error>
+        }
+
+        @if (registerForm.hasError('passwordMismatch')
+        && registerForm.get('confirmPassword')?.touched) {
+        <mat-error>Passwords do not match.</mat-error>
+        }
+      </mat-form-field>
+
+      @if (successMessage) {
+      <p class="success-message" role="status">
+        {{ successMessage }}
+      </p>
+      }
+      @if (errorMessage) {
+      <p class="error-message" role="alert">
+        {{ errorMessage}}
+      </p>
+      }
+      <button mat-raised-button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/login">Sign in</a>
+    </p>
+
+    <p class="terms">
+      By creating an account, you agree to our Terms of Service and Privacy Policy.
+    </p>
+  </section>
+
+  <aside class="auth-visual">
+    <div class="visual-content">
+      <span class="eyebrow">YOUR KNOWLEDGE. ONE PLACE.</span>
+      <h2>Turn your documents into answers.</h2>
+      <p>
+        Upload your PDFs, ask questions in natural language,
+        and discover insights from your own knowledge base.
+      </p>
+
+      <div class="feature">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <div>
+          <strong>Chat with your PDFs</strong>
+          <span>Find answers without searching page by page.</span>
+        </div>
+      </div>
+
+      <div class="feature">
+        <mat-icon>psychology</mat-icon>
+        <div>
+          <strong>AI-powered knowledge</strong>
+          <span>Get responses grounded in your documents.</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

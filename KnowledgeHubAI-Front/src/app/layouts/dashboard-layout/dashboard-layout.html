@@ -1,0 +1,103 @@
+
+<div class="dashboard-shell">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/dashboard">
+      <span class="brand-icon">K</span>
+      <span>
+        KnowledgeHub<span class="brand-ai">AI</span>
+      </span>
+    </a>
+
+    <div class="nav-section">
+      <p class="nav-heading">WORKSPACE</p>
+
+      <a
+        class="nav-link"
+        routerLink="/dashboard/documents"
+        routerLinkActive="active">
+        <span class="nav-icon">▤</span>
+        <span>My Documents</span>
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/chat"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon">✧</span>
+        <span>Chat with PDF</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-panel">
+    <header class="topbar">
+      <div class="topbar-actions">
+        <span class="status-dot"></span>
+        <span class="system-status">Workspace</span>
+
+        <div class="user-menu-container">
+          <button
+            type="button"
+            class="user-menu-trigger"
+            (click)="toggleUserMenu()"
+            [attr.aria-expanded]="userMenuOpen"
+            aria-label="Open account menu">
+
+            <span class="avatar topbar-avatar">
+              {{ userInitial }}
+            </span>
+
+            <span class="topbar-user-details">
+              <strong>
+                {{ isLoadingUser ? 'Loading...' : displayName }}
+              </strong>
+
+              <small>
+                {{ currentUser?.email || 'Account' }}
+              </small>
+            </span>
+
+            <span class="menu-chevron">⌄</span>
+          </button>
+
+          <div class="user-dropdown" *ngIf="userMenuOpen">
+            <div class="dropdown-user">
+              <span class="avatar dropdown-avatar">
+                {{ userInitial }}
+              </span>
+
+              <div class="dropdown-user-details">
+                <strong>{{ displayName }}</strong>
+                <span>
+                  {{ currentUser?.email || 'Account information unavailable' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <div class="dropdown-role" *ngIf="currentUser">
+              <span>Account role</span>
+              <strong>{{ currentUser.role }}</strong>
+            </div>
+
+            <button
+              type="button"
+              class="dropdown-logout"
+              (click)="onLogout()"
+              [disabled]="isLoggingOut">
+
+              <span>↪</span>
+              {{ isLoggingOut ? 'Signing out...' : 'Logout' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

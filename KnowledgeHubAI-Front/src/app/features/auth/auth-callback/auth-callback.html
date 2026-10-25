@@ -1,0 +1,16 @@
+
+<div class="auth-callback">
+  @if (message()) {
+    <p>{{ message() }}</p>
+  }
+
+  @if (error()) {
+    <p class="error-message">{{ error() }}</p>
+
+    <button
+      type="button"
+      (click)="router.navigateByUrl('/login')">
+      Back to Login
+    </button>
+  }
+</div>

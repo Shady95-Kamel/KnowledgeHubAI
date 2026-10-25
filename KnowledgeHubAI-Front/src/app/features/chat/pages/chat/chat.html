@@ -1,0 +1,199 @@
+
+<div class="chat-page">
+
+  <!-- Header -->
+  <header class="chat-header">
+
+    <button
+      type="button"
+      class="back-home-button"
+      routerLink="/dashboard">
+      <span class="back-icon" aria-hidden="true">←</span>
+      <span>Back to Home</span>
+    </button>
+
+    <div class="header-title">
+      <span class="eyebrow">KNOWLEDGEHUB AI</span>
+      <h1>AI Document Chat</h1>
+      <p>Ask questions and get answers from your PDF documents.</p>
+    </div>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      AI Assistant
+    </div>
+
+  </header>
+
+  <!-- Document Filter -->
+  <div class="document-filter">
+
+    <label for="documentSelect">Search in</label>
+
+    <select
+      id="documentSelect"
+      name="documentSelect"
+      [(ngModel)]="selectedDocumentId"
+      [disabled]="isLoadingDocuments">
+
+      <option [ngValue]="null">All my documents</option>
+
+      <option
+        *ngFor="let document of documents"
+        [ngValue]="document.id">
+        {{ document.name }}
+      </option>
+
+    </select>
+
+    <p *ngIf="isLoadingDocuments">
+      Loading your documents...
+    </p>
+
+    <p *ngIf="!isLoadingDocuments && documents.length === 0 && !documentsErrorMessage">
+      No processed documents are available for chat yet.
+    </p>
+
+    <p *ngIf="documentsErrorMessage" class="error-message">
+      {{ documentsErrorMessage }}
+    </p>
+
+    <button
+      type="button"
+      class="refresh-documents-button"
+      (click)="loadDocuments()"
+      [disabled]="isLoadingDocuments">
+      Refresh documents
+    </button>
+
+  </div>
+
+  <!-- Conversation -->
+  <main class="conversation">
+
+    <!-- Welcome State -->
+    <div class="welcome" *ngIf="messages.length === 0">
+
+      <div class="welcome-icon">✦</div>
+
+      <h2>What would you like to know?</h2>
+
+      <p>
+        Ask a question about your uploaded documents.
+        Answers will include relevant source passages when available.
+      </p>
+
+    </div>
+
+    <!-- Messages -->
+    <article
+      class="message"
+      *ngFor="let message of messages"
+      [class.user-message]="message.role === 'user'"
+      [class.assistant-message]="message.role === 'assistant'">
+
+      <div class="avatar">
+        {{ message.role === 'user' ? 'You' : 'AI' }}
+      </div>
+
+      <div class="message-body">
+
+        <div class="message-label">
+          {{ message.role === 'user' ? 'You' : 'KnowledgeHub AI' }}
+        </div>
+
+        <div class="message-content">{{ message.content }}</div>
+
+        <!-- Sources -->
+        <section
+          class="sources"
+          *ngIf="message.role === 'assistant' && message.sources?.length">
+
+          <h3>Sources used</h3>
+
+          <article
+            class="source-card"
+            *ngFor="let source of message.sources; let i = index">
+
+            <div class="source-heading">
+              <span>Source {{ i + 1 }} · Page {{ source.pageNumber }}</span>
+              <span>Score: {{ source.score | number:'1.2-3' }}</span>
+            </div>
+
+            <p>{{ source.text }}</p>
+
+          </article>
+
+        </section>
+
+        <!-- No Sources -->
+        <p
+          class="no-sources"
+          *ngIf="message.role === 'assistant' && message.sources && message.sources.length === 0">
+          No source references were returned for this answer.
+        </p>
+
+      </div>
+
+    </article>
+
+    <!-- Loading -->
+    <div class="loading-message" *ngIf="isLoading">
+
+      <span class="loading-dot"></span>
+      <span class="loading-dot"></span>
+      <span class="loading-dot"></span>
+
+      <span>Searching documents and generating an answer...</span>
+
+    </div>
+
+    <!-- Error -->
+    <div class="error-message chat-error" *ngIf="errorMessage">
+      <span>{{ errorMessage }}</span>
+
+      <button
+        type="button"
+        class="dismiss-error-button"
+        (click)="errorMessage = ''"
+        aria-label="Dismiss error">
+        ×
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Message Composer -->
+  <form class="composer" (ngSubmit)="sendMessage()">
+
+    <textarea
+      name="question"
+      [(ngModel)]="question"
+      placeholder="Ask a question about your PDFs..."
+      rows="2"
+      maxlength="2000"
+      [disabled]="isLoading"
+      (keydown.enter)="onEnter($event)"
+      required>
+    </textarea>
+
+    <div class="composer-footer">
+
+      <span>
+        Answers are grounded in retrieved document content.
+      </span>
+
+      <button
+        type="submit"
+        [disabled]="isLoading || !question.trim()">
+
+        <span>{{ isLoading ? 'Thinking...' : 'Send' }}</span>
+        <span aria-hidden="true">➤</span>
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
